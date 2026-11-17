@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habla Spanish — Numbers, Alphabet, Jobs & Routines</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        terracotta: {
+                            500: '#e05a47',
+                            600: '#c94634',
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <!-- Brand -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-terracotta-500 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+                        HS
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-lg font-extrabold text-slate-800 leading-tight">Habla Spanish</h1>
+                        <p class="text-[11px] text-slate-500 font-medium">Interactive Audio & Vocabulary Studio</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav id="main-nav" aria-label="Course Sections" class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto no-scrollbar text-xs sm:text-sm">
+                <button data-tab="numbers" class="nav-tab active-tab">
+                    <i class="fa-solid fa-hashtag text-amber-500"></i> Numbers (1–30)
+                </button>
+                <button data-tab="alphabet" class="nav-tab">
+                    <i class="fa-solid fa-font text-purple-500"></i> Abecedario
+                </button>
+                <button data-tab="jobs" class="nav-tab">
+                    <i class="fa-solid fa-briefcase text-blue-500"></i> Jobs
+                </button>
+                <button data-tab="routines" class="nav-tab">
+                    <i class="fa-solid fa-clock text-emerald-500"></i> Routines
+                </button>
+                <button data-tab="barrio" class="nav-tab">
+                    <i class="fa-solid fa-city text-indigo-500"></i> Barrio
+                </button>
+                <button data-tab="reader" class="nav-tab">
+                    <i class="fa-solid fa-align-left text-teal-500"></i> Read Text
+                </button>
+                <button data-tab="quiz" class="nav-tab">
+                    <i class="fa-solid fa-headphones text-terracotta-500"></i> Quiz
+                </button>
+            </nav>
+        </div>
+
+        <!-- Audio Controls Bar -->
+        <div id="control-bar" class="bg-slate-50 border-t border-slate-200/80">
+            <div class="max-w-5xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+                <!-- Speed Controls -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-gauge-high mr-1"></i>Speed:</span>
+                    <div id="speed-controls" class="inline-flex bg-slate-200/70 p-0.5 rounded-xl text-xs font-semibold">
+                        <button data-speed="0.5" class="speed-btn">0.5x Super Slow</button>
+                        <button data-speed="0.7" class="speed-btn active-speed">0.7x Slow</button>
+                        <button data-speed="0.95" class="speed-btn">1.0x Normal</button>
+                    </div>
+                </div>
+
+                <!-- Voice Selector & Play All -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <label for="voice-select" class="sr-only">Spanish Voice</label>
+                    <select id="voice-select" class="text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:border-amber-400 max-w-[160px] sm:max-w-[210px]">
+                        <option value="">Default Spanish Voice</option>
+                    </select>
+
+                    <button id="play-all-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm px-3.5 py-1.5 rounded-xl shadow-sm transition-all flex items-center gap-2 active:scale-95">
+                        <i id="play-all-icon" class="fa-solid fa-circle-play"></i>
+                        <span id="play-all-text">Play Section Slowly</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Speech Support Warning Banner -->
+    <div id="tts-warning" class="hidden max-w-5xl w-full mx-auto px-4 pt-4">
+        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium px-4 py-3 rounded-2xl flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+            <span>Your browser does not fully support Spanish Text-to-Speech. Try opening this page in Chrome, Edge, or Safari for audio playback.</span>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6">
+
+        <!-- 1. NUMBERS TAB -->
+        <section id="view-numbers" class="tab-view space-y-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Los Números (1 – 30)</h2>
+                    <p class="text-xs text-slate-500">Tap any number card to hear clear Spanish pronunciation.</p>
+                </div>
+                <div id="number-filters" class="flex flex-wrap gap-1.5 text-xs">
+                    <button data-num-filter="all" class="num-filter-btn active-amber-filter">All (1–30)</button>
+                    <button data-num-filter="1-10" class="num-filter-btn">1–10</button>
+                    <button data-num-filter="11-20" class="num-filter-btn">11–20</button>
+                    <button data-num-filter="21-30" class="num-filter-btn">21–30</button>
+                </div>
+            </div>
+
+            <div id="numbers-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+        </section>
+
+        <!-- 2. ALPHABET TAB -->
+        <section id="view-alphabet" class="tab-view hidden space-y-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-sm">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">El Abecedario (Spanish Alphabet)</h2>
+                    <p class="text-xs text-slate-500">Tap any letter to hear its official Spanish name and an example word.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <button id="play-alphabet-letters-btn" data-alpha-mode="letters" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap active:scale-95">
+                        <i id="play-alphabet-letters-icon" class="fa-solid fa-circle-play"></i>
+                        <span id="play-alphabet-letters-text">Letters Only (A–Z)</span>
+                    </button>
+                    <button id="play-alphabet-examples-btn" data-alpha-mode="examples" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 whitespace-nowrap active:scale-95">
+                        <i id="play-alphabet-examples-icon" class="fa-solid fa-circle-play"></i>
+                        <span id="play-alphabet-examples-text">Letters + Examples</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="alphabet-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
+        </section>
+
+        <!-- 3. JOBS TAB -->
+        <section id="view-jobs" class="tab-view hidden space-y-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-800">Las Profesiones (Jobs & Occupations)</h2>
+                <p class="text-xs text-slate-500">Practice both masculine (<em>el</em>) and feminine (<em>la</em>) job titles with audio.</p>
+            </div>
+
+            <div id="jobs-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5"></div>
+        </section>
+
+        <!-- 4. ROUTINES TAB -->
+        <section id="view-routines" class="tab-view hidden space-y-6">
+            <div>
+                <div class="mb-3">
+                    <h2 class="text-lg font-bold text-slate-800">Verbos de la Rutina Diaria (Daily Routine Verbs)</h2>
+                    <p class="text-xs text-slate-500">Tap any card to listen to the verb and a full example sentence.</p>
+                </div>
+                <div id="verbs-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5"></div>
+            </div>
+
+            <div>
+                <div class="mb-3">
+                    <h2 class="text-lg font-bold text-slate-800">Expresiones de Tiempo (Time Expressions)</h2>
+                    <p class="text-xs text-slate-500">Essential phrases to describe when you do your daily activities.</p>
+                </div>
+                <div id="time-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- 5. BARRIO TAB -->
+        <section id="view-barrio" class="tab-view hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">El Barrio y la Ciudad (Neighborhood & City)</h2>
+                    <p class="text-xs text-slate-500">Services, adjectives, and compass directions (norte, sur, este, oeste, noreste, etc.).</p>
+                </div>
+                <div id="barrio-filters" class="flex flex-wrap gap-1.5 text-xs">
+                    <button data-barrio-filter="all" class="barrio-filter-btn active-indigo-filter">All</button>
+                    <button data-barrio-filter="services" class="barrio-filter-btn">Services</button>
+                    <button data-barrio-filter="adjectives" class="barrio-filter-btn">Descriptions</button>
+                    <button data-barrio-filter="places" class="barrio-filter-btn">Locations & Zones</button>
+                </div>
+            </div>
+
+            <div id="barrio-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5"></div>
+        </section>
+
+        <!-- 6. CUSTOM TEXT READER TAB -->
+        <section id="view-reader" class="tab-view hidden max-w-3xl mx-auto space-y-4">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-600">Pronunciation Reader</span>
+                        <h2 class="text-lg font-extrabold text-slate-800">Paste & Listen to Any Spanish Text</h2>
+                        <p class="text-xs text-slate-500">Paste a paragraph, dialogue, or textbook exercise below and click Read Out Loud. Use the top bar to adjust speed.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="sample-text-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1 text-teal-600"></i> Sample Text
+                        </button>
+                        <button id="clear-text-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="custom-spanish-input" class="sr-only">Spanish Text Input</label>
+                    <textarea id="custom-spanish-input" rows="6"
+                        placeholder="Pega o escribe un párrafo en español aquí... (Paste or type a Spanish paragraph here...)"
+                        class="w-full rounded-2xl border border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 p-4 text-sm sm:text-base text-slate-800 leading-relaxed focus:outline-none transition-all"></textarea>
+                    <div id="reader-status" class="hidden mt-2 text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 rounded-xl px-3 py-2 flex items-center gap-2">
+                        <i class="fa-solid fa-volume-high animate-pulse"></i>
+                        <span id="reader-status-text">Reading your Spanish paragraph out loud...</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                    <button id="read-paragraph-btn" class="flex-1 sm:flex-none bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>Read Out Loud</span>
+                    </button>
+                    <button id="stop-paragraph-btn" class="bg-slate-200 hover:bg-rose-600 text-slate-700 hover:text-white font-bold text-sm px-5 py-3 rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95">
+                        <i class="fa-solid fa-stop"></i>
+                        <span>Stop</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. QUIZ TAB -->
+        <section id="view-quiz" class="tab-view hidden max-w-xl mx-auto">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-terracotta-500">Listening Challenge</span>
+                        <h2 class="text-lg font-extrabold text-slate-800">Listen & Choose</h2>
+                    </div>
+                    <div class="flex gap-3 text-right">
+                        <div class="bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
+                            <span class="block text-[10px] font-semibold text-slate-400 uppercase">Score</span>
+                            <span id="quiz-score" class="text-sm font-extrabold text-slate-800">0 / 0</span>
+                        </div>
+                        <div class="bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200/70">
+                            <span class="block text-[10px] font-semibold text-amber-600 uppercase">Streak</span>
+                            <span id="quiz-streak" class="text-sm font-extrabold text-amber-700">0 🔥</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Category Filter -->
+                <div id="quiz-categories" class="flex flex-wrap gap-1.5 justify-center mb-6">
+                    <button data-qcat="all" class="qcat-btn active-amber-filter text-xs">All Topics</button>
+                    <button data-qcat="numbers" class="qcat-btn">Numbers</button>
+                    <button data-qcat="alphabet" class="qcat-btn">Alphabet</button>
+                    <button data-qcat="jobs" class="qcat-btn">Jobs</button>
+                    <button data-qcat="routines" class="qcat-btn">Routines</button>
+                    <button data-qcat="barrio" class="qcat-btn">Barrio</button>
+                </div>
+
+                <!-- Speaker Trigger -->
+                <div class="flex flex-col items-center justify-center my-6">
+                    <button id="quiz-play-btn" aria-label="Play audio prompt" class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-500 to-terracotta-500 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-3xl">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <button id="quiz-slow-btn" class="mt-3 text-xs font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">
+                        <i class="fa-solid fa-ear-listen mr-1"></i> Replay super slowly (0.5x)
+                    </button>
+                </div>
+
+                <!-- Answer Choices -->
+                <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5"></div>
+
+                <!-- Feedback & Next -->
+                <div id="quiz-feedback" aria-live="polite" class="hidden"></div>
+
+                <button id="next-question-btn" class="hidden w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm transition-all">
+                    Next Question <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
